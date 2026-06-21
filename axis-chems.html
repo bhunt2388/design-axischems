@@ -154,48 +154,52 @@ let uid      = 0;
 // INITIAL LABEL SETUP
 // ══════════════════════════════════════════════════════════
 function buildDefault() {
-  // Compound name
-  addLayer({ type:'text', text:'BPC-157', x:90, y:380,
-    fs:160, fw:'900', ff:"'Inter','Arial Black',Arial,sans-serif",
+  // White band = y 328–679. Blue band = y 679–821.
+  // Black header band = y 0–310.
+
+  // Compound name — top of white band
+  addLayer({ type:'text', text:'BPC-157', x:60, y:340,
+    fs:220, fw:'900', ff:"'Inter','Arial Black',Arial,sans-serif",
     color:'#0a0e1a', align:'left', locked:false, id:++uid });
 
-  // Dose pill (styled text)
-  addLayer({ type:'text', text:'5 MG', x:90, y:564,
-    fs:72, fw:'700', ff:"'Inter',Arial,sans-serif",
+  // Dose
+  addLayer({ type:'text', text:'5 MG', x:60, y:565,
+    fs:80, fw:'700', ff:"'Inter',Arial,sans-serif",
     color:'#0B4CB8', align:'left', locked:false, id:++uid });
 
   // Purity
-  addLayer({ type:'text', text:'99% PURE', x:300, y:564,
-    fs:64, fw:'700', ff:"'Inter',Arial,sans-serif",
-    color:'#555', align:'left', locked:false, id:++uid });
+  addLayer({ type:'text', text:'99% PURE', x:280, y:565,
+    fs:72, fw:'600', ff:"'Inter',Arial,sans-serif",
+    color:'#6a8aaa', align:'left', locked:false, id:++uid });
 
   // Disclaimer
-  addLayer({ type:'text', text:'FOR RESEARCH USE ONLY', x:90, y:630,
-    fs:42, fw:'700', ff:"'Inter',Arial,sans-serif",
+  addLayer({ type:'text', text:'FOR RESEARCH USE ONLY', x:60, y:624,
+    fs:44, fw:'700', ff:"'Inter',Arial,sans-serif",
     color:'#444', align:'left', locked:false, id:++uid });
 
-  // Batch + Expiry
-  addLayer({ type:'text', text:'BATCH NO:', x:90, y:672,
-    fs:38, fw:'600', ff:"'JetBrains Mono','Courier New',monospace",
-    color:'#666', align:'left', locked:false, id:++uid });
-
-  addLayer({ type:'text', text:'EXPIRY DATE:', x:460, y:672,
-    fs:38, fw:'600', ff:"'JetBrains Mono','Courier New',monospace",
-    color:'#666', align:'left', locked:false, id:++uid });
-
-  // Footer text in blue band
-  addLayer({ type:'text', text:'LYOPHILIZED POWDER', x:90, y:762,
-    fs:56, fw:'700', ff:"'Inter',Arial,sans-serif",
-    color:'#ffffff', align:'left', locked:false, id:++uid });
-
-  // USA Sourced badge
-  addLayer({ type:'text', text:'🛡 USA SOURCED & TESTED', x:90, y:660,
-    fs:36, fw:'700', ff:"'Inter',Arial,sans-serif",
+  // USA Sourced
+  addLayer({ type:'text', text:'USA SOURCED & TESTED', x:1150, y:540,
+    fs:38, fw:'700', ff:"'Inter',Arial,sans-serif",
     color:'#0B4CB8', align:'left', locked:false, id:++uid });
 
-  // LOGO — locked
+  // Batch
+  addLayer({ type:'text', text:'BATCH NO:', x:60, y:666,
+    fs:40, fw:'600', ff:"'JetBrains Mono','Courier New',monospace",
+    color:'#777', align:'left', locked:false, id:++uid });
+
+  // Expiry
+  addLayer({ type:'text', text:'EXPIRY DATE:', x:450, y:666,
+    fs:40, fw:'600', ff:"'JetBrains Mono','Courier New',monospace",
+    color:'#777', align:'left', locked:false, id:++uid });
+
+  // Footer — in blue band
+  addLayer({ type:'text', text:'LYOPHILIZED POWDER', x:60, y:758,
+    fs:72, fw:'700', ff:"'Inter',Arial,sans-serif",
+    color:'#ffffff', align:'left', locked:false, id:++uid });
+
+  // LOGO — locked, in black header band
   addLayer({ type:'img', src:LOGO_SRC,
-    x:1200, y:80, w:650, h:163, locked:true, id:++uid });
+    x:60, y:60, w:700, h:175, locked:true, id:++uid });
 }
 
 // ══════════════════════════════════════════════════════════
