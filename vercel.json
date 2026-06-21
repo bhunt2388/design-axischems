@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "index.html",      "use": "@vercel/static" },
+    { "src": "axis-chems.html", "use": "@vercel/static" },
+    { "src": "axiom-labz.html", "use": "@vercel/static" },
+    { "src": "emigenex.html",   "use": "@vercel/static" },
+    { "src": "auro.html",       "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/axis-chems",  "dest": "/axis-chems.html" },
+    { "src": "/axiom-labz",  "dest": "/axiom-labz.html" },
+    { "src": "/emigenex",    "dest": "/emigenex.html"   },
+    { "src": "/auro",        "dest": "/auro.html"       },
+    { "src": "/(.*)",        "dest": "/index.html"      }
+  ]
+}
