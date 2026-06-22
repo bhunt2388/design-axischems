@@ -775,6 +775,41 @@ $('pngBtn').addEventListener('click',async()=>{
  const PREVIEW_PPI=380;            // flat card preview is 665x285 = 1.75x0.75in @380ppi
  const dpi=parseInt($('res').value);
  const scale=dpi/PREVIEW_PPI;      // export hits exact 1.75x0.75in at target DPI
+
+ // In batch view: export one PNG per group to avoid crushing the canvas size limit
+ if(view==='batch'){
+   const groups=$('batchGrid').querySelectorAll('.batch-group');
+   if(!groups.length){alert('Generate a batch first.');return;}
+   const nm=($('pname').value||'EMIGENEX').replace(/[^\w-]/g,'_');
+   let idx=0;
+   for(const grp of groups){
+     // get product name from first label's name element inside this group
+     const nameEl=grp.querySelector('.lc-pname');
+     const grpName=nameEl?nameEl.textContent.trim().replace(/[^\w-]/g,'_'):`item${idx+1}`;
+     // cap scale to avoid canvas limit (~16384px max dimension)
+     const cards=grp.querySelectorAll('.label-card');
+     const perRow=Math.floor((grp.offsetWidth||2660)/665)||4;
+     const rows=Math.ceil(cards.length/perRow);
+     const rawH=rows*285+rows*20;
+     const maxScale=Math.min(scale,Math.floor(16000/rawH*10)/10);
+     const useScale=Math.max(1,maxScale);
+     const canvas=await html2canvas(grp,{scale:useScale,backgroundColor:null,useCORS:true,logging:false});
+     await new Promise(res=>{
+       canvas.toBlob(blob=>{
+         if(!blob||blob.size<100){console.warn('Empty blob for group',grpName);res();return;}
+         const a=document.createElement('a');
+         a.download=`EMIGENEX_${grpName}_${dpi}dpi.png`;
+         a.href=URL.createObjectURL(blob);a.click();
+         setTimeout(()=>{URL.revokeObjectURL(a.href);res();},300);
+       },'image/png');
+     });
+     idx++;
+     await new Promise(r=>setTimeout(r,400)); // slight delay between downloads
+   }
+   return;
+ }
+
+ // Single label / vial export
  const el=targetEl();
  const canvas=await html2canvas(el,{scale,backgroundColor:null,useCORS:true,logging:false});
  const a=document.createElement('a');
