@@ -204,9 +204,45 @@ body::before{
 .vial-cap-name{margin-top:22px;font-family:'Fraunces';font-style:italic;color:#8295b3;font-size:13px}
 
 /* ============ BATCH GRID ============ */
-.batch-grid{display:grid;grid-template-columns:repeat(auto-fill,665px);gap:20px;width:100%;justify-content:center;align-content:start}
+.batch-grid{width:100%}
+.batch-group{display:grid;grid-template-columns:repeat(auto-fill,665px);gap:20px;width:100%;justify-content:center;align-content:start;margin-bottom:32px;padding-bottom:32px;border-bottom:1px dashed rgba(198,162,78,.25)}
+.batch-group:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.batch-group-header{width:100%;text-align:left;color:#c6a24e;font-family:'Spline Sans Mono';font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;grid-column:1/-1}
 .batch-grid .label-card{width:665px}
 .batch-note{width:100%;text-align:center;color:#7e90ad;font-family:'Fraunces';font-style:italic;margin-bottom:8px}
+
+/* ============ PRINT ============ */
+@media print{
+  body{margin:0;background:#fff}
+  .topbar,.aside,.stage-top,.foot{display:none!important}
+  .wrap{display:block}
+  .stage-area{padding:0;margin:0}
+  .stage{overflow:visible;background:none;box-shadow:none;height:auto;padding:0}
+  .stage-inner{overflow:visible;height:auto;align-items:flex-start;padding:0}
+  #viewCard,#viewVial{display:none!important}
+  #viewBatch{display:block!important}
+  .batch-grid{display:block;width:100%}
+  /* Each group = one product run → page break after it */
+  .batch-group{
+    display:flex;flex-wrap:wrap;
+    gap:6pt;
+    page-break-after:always;
+    break-after:page;
+    margin:0;padding:0;border:none;
+    break-inside:avoid-page;
+  }
+  .batch-group:last-child{page-break-after:auto;break-after:auto}
+  .batch-group-header{display:none}
+  /* Native px size — browser "Fit to Page" handles scaling */
+  .batch-grid .label-card{
+    width:665px!important;
+    height:285px!important;
+    overflow:hidden!important;
+    border-radius:0!important;
+    break-inside:avoid;
+  }
+  @page{size:auto;margin:0.3in}
+}
 
 .hint{font-size:10.5px;color:#6f819c;line-height:1.6;margin-top:6px}
 .foot{position:fixed;bottom:0;left:0;width:380px;padding:9px 22px;font-size:9px;letter-spacing:.1em;color:#5a6b85;
@@ -344,8 +380,12 @@ body::before{
         <label>One per line · Name, Strength Unit</label>
         <textarea id="batch" placeholder="CJC-1295, 5 MG&#10;Ipamorelin, 5 MG&#10;BPC-157, 10 MG&#10;Tesamorelin, 10 MG"></textarea>
       </div>
-      <button class="btn btn-ghost" id="runBatch" style="width:100%;justify-content:center">Generate batch sheet</button>
-      <div class="hint">Switch to the <b>Batch</b> view to see the sheet, then export the whole grid as one PNG.</div>
+      <div class="field" style="margin-top:8px">
+        <label>Labels per item (copies)</label>
+        <input type="number" id="batchQty" value="20" min="1" max="200" style="width:100%;background:var(--surface2);border:1px solid var(--line);color:var(--ink);padding:7px 10px;border-radius:6px;font-size:13px;font-family:inherit">
+      </div>
+      <button class="btn btn-ghost" id="runBatch" style="width:100%;justify-content:center;margin-top:8px">Generate batch sheet</button>
+      <div class="hint">Each item prints as a separate group — <b>20 labels per item</b> by default. Hit <b>Print</b> to send each group to its own page. Change the qty above to adjust copies.</div>
     </div>
   </aside>
 
@@ -701,13 +741,21 @@ function buildBatchCard(name,doseTxt){
 }
 $('runBatch').addEventListener('click',()=>{
  const lines=$('batch').value.split('\n').map(l=>l.trim()).filter(Boolean);
+ const qty=Math.max(1,parseInt($('batchQty').value)||20);
  const grid=$('batchGrid'); grid.innerHTML='';
- if(!lines.length){grid.innerHTML='<div class="batch-note">Add lines like: <b>BPC-157, 5 MG</b></div>';}
+ if(!lines.length){grid.innerHTML='<div class="batch-note">Add lines like: <b>BPC-157, 5 MG</b></div>'; }
  lines.forEach(l=>{
    const parts=l.split(',');
    const name=(parts[0]||'').trim();
    const doseTxt=(parts[1]||'').trim();
-   grid.insertAdjacentHTML('beforeend',buildBatchCard(name,doseTxt));
+   // build a group div with qty copies
+   let groupHTML=`<div class="batch-group">`;
+   groupHTML+=`<div class="batch-group-header">${name}${doseTxt?' · '+doseTxt:''} &nbsp;—&nbsp; ${qty} labels</div>`;
+   for(let i=0;i<qty;i++){
+     groupHTML+=buildBatchCard(name,doseTxt);
+   }
+   groupHTML+=`</div>`;
+   grid.insertAdjacentHTML('beforeend',groupHTML);
  });
  // jump to batch view
  document.querySelectorAll('#viewTabs button').forEach(x=>x.classList.remove('on'));
