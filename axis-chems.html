@@ -429,12 +429,23 @@ function exportPNG(){
   const prev=sel;
   if(sel){sel.classList.remove('sel');sel=null;}
   const po=outlines;if(outlines)toggleOutlines();
-  html2canvas(label,{scale:2,width:LW,height:LH,backgroundColor:null,useCORS:true,allowTaint:true,logging:false})
-    .then(canvas=>{
-      const name=(layers.find(l=>l.cfg.type!=='img')?.el.textContent.trim()||'axis-label').replace(/[^a-z0-9_\-]/gi,'_');
-      const a=document.createElement('a');a.download=name+'.png';a.href=canvas.toDataURL('image/png');a.click();
-      if(!po)toggleOutlines();if(prev)select(prev);
-    });
+  // Temporarily scale stage to 1:1 — html2canvas captures at display scale otherwise
+  const stageEl=document.getElementById('stage');
+  const prevT=stageEl.style.transform;
+  stageEl.style.transform='scale(1)';
+  label.style.width=LW+'px';
+  label.style.height=LH+'px';
+  setTimeout(function(){
+    html2canvas(label,{scale:2,width:LW,height:LH,backgroundColor:'#ffffff',useCORS:true,allowTaint:true,logging:false,x:0,y:0,scrollX:0,scrollY:0,windowWidth:LW+400,windowHeight:LH+200})
+      .then(function(canvas){
+        stageEl.style.transform=prevT;
+        fitLabel();
+        if(!po)toggleOutlines();
+        if(prev)select(prev);
+        const name=(layers.find(function(l){return l.cfg.type!=='img';})?.el.textContent.trim()||'axis-label').replace(/[^a-z0-9_\-]/gi,'_');
+        const a=document.createElement('a');a.download=name+'.png';a.href=canvas.toDataURL('image/png');a.click();
+      });
+  },50);
 }
 
 // Catalog dropdown
