@@ -97,14 +97,8 @@ html,body{min-height:100dvh;background:var(--bg);color:var(--text);font-family:'
   padding:13px 17px 11px 14px;display:flex;flex-direction:column;
   justify-content:space-between;
   background:linear-gradient(135deg,#0D1929 0%,#060A12 65%);}
-.lp-body::before{content:'';position:absolute;inset:0;pointer-events:none;
-  background-image:
-    linear-gradient(#0F1E33 1px,transparent 1px),
-    linear-gradient(90deg,#0F1E33 1px,transparent 1px);
-  background-size:24px 24px;}
-.lp-body::after{content:'';position:absolute;top:-28px;right:-28px;
-  width:160px;height:160px;border-radius:50%;pointer-events:none;
-  background:radial-gradient(closest-side,#132649,#060A12);}
+.lp-body::before{display:none;}
+.lp-body::after{display:none;}
 .lp-top{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;}
 .lp-logo{width:auto;object-fit:contain;}
 .lp-ruo{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;
@@ -458,20 +452,9 @@ function buildLabelHtml(l){
     display:flex;flex-direction:column;justify-content:space-between;
     background:linear-gradient(135deg,#0D1929 0%,#060A12 65%);
   ">
-    <!-- subtle grid — solid color no alpha -->
-    <div style="
-      position:absolute;inset:0;pointer-events:none;
-      background-image:
-        linear-gradient(#0F1E33 1px,transparent 1px),
-        linear-gradient(90deg,#0F1E33 1px,transparent 1px);
-      background-size:24px 24px;
-    "></div>
-    <!-- glow — solid radial, no alpha -->
-    <div style="
-      position:absolute;top:-28px;right:-28px;
-      width:160px;height:160px;border-radius:50%;pointer-events:none;
-      background:radial-gradient(closest-side,#132649,#060A12);
-    "></div>
+    <!-- glow removed, grid removed -->
+    <div style=""></div>
+    <div style=""></div>
     <!-- top row -->
     <div style="display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;">
       <img src="${LOGO}" style="height:${sizes.logo}px;width:auto;">
