@@ -6,7 +6,8 @@
     { "src": "axiom-labz.html",   "use": "@vercel/static" },
     { "src": "emigenex.html",     "use": "@vercel/static" },
     { "src": "auro.html",         "use": "@vercel/static" },
-    { "src": "shelf-labels.html", "use": "@vercel/static" }
+    { "src": "shelf-labels.html", "use": "@vercel/static" },
+    { "src": "vial-labels.html",  "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/axis-chems",    "dest": "/axis-chems.html"   },
@@ -14,6 +15,7 @@
     { "src": "/emigenex",      "dest": "/emigenex.html"     },
     { "src": "/auro",          "dest": "/auro.html"         },
     { "src": "/shelf-labels",  "dest": "/shelf-labels.html" },
+    { "src": "/vial-labels",   "dest": "/vial-labels.html"  },
     { "src": "/(.*)",          "dest": "/index.html"        }
   ]
 }
