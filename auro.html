@@ -201,7 +201,7 @@ function applyPos(){for(const k in GRP)$(GRP[k]).setAttribute('transform',`trans
 function sync(){
   for(const k in TEXT)$(k).textContent=$(TEXT[k]).value;
   for(const k in SIZE){const s=parseFloat($(SIZE[k]).value);if(s>0)$(k).style.fontSize=(s*SCALE)+'px';}
-  $('prodSzVal').textContent=Math.round(parseFloat($('sz_PRODUCT').value)||34)+'px';
+  $('prodSzVal').textContent=Math.round(parseFloat($('sz_PRODUCT').value)||34);
   applyPos();
 }
 document.querySelectorAll('.panel input:not(#scale):not(#sz_PRODUCT_num),.panel select').forEach(el=>{el.addEventListener('input',sync);el.addEventListener('change',sync);});
